@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RedisConfigProvider.Publish;
-using RedisConfigProvider.WebApi.Config;
-using Newtonsoft.Json;
+using System.Collections.Concurrent;
+using RedisConfigProvider.PublishConfig;
+using RedisConfigProvider.Operate;
 
-namespace RedisConfigProvider.WebApi.Controllers;
+namespace RedisConfig.WebApi.Controllers;
 
 [Route("[controller]/[action]")]
 [ApiController]
@@ -17,49 +17,52 @@ public class TestController : ControllerBase
         this.configuration = configuration;
         this.publish = publish;
     }
-    [HttpGet]
-    public async Task<ActionResult<string>> GetConfigAsync()
+    [HttpPost]
+    public async Task<ActionResult<string>> AddConfigAsync()
     {
-        TestConfig config = new()
+        var keyValues = new Dictionary<string, ConcurrentQueue<string>>
         {
-            Number = 1,
-            key = $"{nameof(TestConfig)}-key",
-            value = $"{nameof(TestConfig)}-value"
+            { "key1", new ConcurrentQueue<string>(new[] { "value1-1", "value1-2" ,"value1-3", "value1-4" ,"value1-5", "value1-6" ,"value1-7", "value1-8" ,"value1-9", "value1-0" }) },
+            { "key2", new ConcurrentQueue<string>(new[] { "value2-1", "value2-2" ,"value2-3", "value2-4","value2-5", "value2-6"}) },
+            { "key3", new ConcurrentQueue<string>(new[] { "value3-1", "value3-2" ,"value3-3", "value3-4" ,"value3-5", "value3-6" }) } ,
+            { "key4", new ConcurrentQueue<string>(new[] { "value4-1", "value4-2","value4-3", "value4-4"  }) }
         };
-        publish.PublishAsync(nameof(TestConfig),JsonConvert.SerializeObject(config));
-        await Task.Delay(3000);
-        var test = configuration.GetSection(nameof(TestConfig)).Get<TestConfig>();
-        return Ok(test);
+
+        var res = await publish.PublishAsync(keyValues);
+        return Ok(res);
     }
     [HttpGet]
+    public async Task<ActionResult<Dictionary<string, ConcurrentQueue<string>>>> GetConfigAsync()
+    {
+        var keyValues = new Dictionary<string, ConcurrentQueue<string>>
+        {
+            { "key1", new ConcurrentQueue<string>(new[] { "value1-1", "value1-2" ,"value1-3", "value1-4" ,"value1-5", "value1-6" ,"value1-7", "value1-8" ,"value1-9", "value1-0" }) },
+            { "key2", new ConcurrentQueue<string>(new[] { "value2-1", "value2-2" ,"value2-3", "value2-4","value2-5", "value2-6"}) },
+            { "key3", new ConcurrentQueue<string>(new[] { "value3-1", "value3-2" ,"value3-3", "value3-4" ,"value3-5", "value3-6" }) } ,
+            { "key4", new ConcurrentQueue<string>(new[] { "value4-1", "value4-2","value4-3", "value4-4"  }) }
+        };
+
+        //var res = keyValues.ConvertToDictionary();
+        keyValues.Remove("key1", "value1-2");
+        keyValues.Remove("key4", "value4-1");
+        return Ok(keyValues);
+    }
+
+    [HttpPost]
     public async Task<ActionResult<string>> TaskAsync()
     {
-        List<Task> tasks = new List<Task>();
-        for (int i = 0; i < 10; i++)
+        bool res = true;
+        for (int i = 0; i < 100; i++)
         {
-            int index = i; // 捕获索引  
-            tasks.Add(Task.Run(() =>
-            {
-                string key = $"key"; // 使用相同的键进行测试。  
-                string value = $"value{index}";
-                publish.PublishAsync(key, value);
-                Console.WriteLine($"Enqueued {key} with value {value}");
-            }));
-        }
-
-        // 等待所有任务完成  
-        await Task.WhenAll(tasks);
-        return Ok("Success: Final value is correct.");
-    }
-    [HttpGet]
-    public async Task<ActionResult<string>> TaskSync()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            string key = $"key[{i}]"; // 使用相同的键进行测试。  
+            string key = $"key"; // 使用相同的键进行测试。  
             string value = $"value{i}";
-            publish.PublishAsync(key, value);
+
+            var isSuss = await publish.PublishAsync(key, value);
+            if (!isSuss)
+            {
+                res = false;
+            }
         }
-        return Ok();
+        return Ok(res);
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
 
-namespace RedisConfigProvider.Extensions;
+namespace RedisConfigProvider.Operate;
 
-public static class HashTableExtension
+public static class HashTableHelper
 {
     /// <summary>
     /// 向哈希表中插入键值对，若不存在键则新建

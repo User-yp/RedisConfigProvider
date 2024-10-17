@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using RedisConfigProvider.Extensions;
+using RedisConfigProvider.Operate;
 using StackExchange.Redis;
 using System.Data.Common;
 using System.Diagnostics;
@@ -67,7 +67,7 @@ public class RedisConfigProvider : ConfigurationProvider, IDisposable
             int dbNumber = options.DbNumber;
             IDatabase database = null;
             Data.Clear();
-            using (var conn = options.ConnectionString())
+            using (var conn = options.ConnectionMultiplexer())
             {
                 database = conn.GetDatabase(dbNumber);
                 DoLoad(database);
@@ -84,7 +84,7 @@ public class RedisConfigProvider : ConfigurationProvider, IDisposable
             lockObj.ExitWriteLock();
         }
         //OnReload cannot be between EnterWriteLock and ExitWriteLock, or "A read lock may not be acquired with the write lock held in this mode" will be thrown.
-        if (DictionaryExtension.IsChanged(clonedData, Data))
+        if (DictionaryHelper.IsChanged(clonedData, Data))
         {
             OnReload();
         }

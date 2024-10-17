@@ -12,7 +12,7 @@ builder.Host.ConfigureAppConfiguration((_, configBuilder) =>
 
 builder.Services.AddRedisPublishService(options =>
 {
-    options.ConnectionString = () => ConnectionMultiplexer.Connect(connStr);
+    options.ConnectionMultiplexer = () => ConnectionMultiplexer.Connect(connStr);
     options.DbNumber = 1;
 });
 builder.Services.AddControllers();

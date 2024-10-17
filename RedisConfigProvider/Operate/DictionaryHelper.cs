@@ -1,6 +1,6 @@
-﻿namespace RedisConfigProvider.Extensions;
+﻿namespace RedisConfigProvider.Operate;
 
-public static class DictionaryExtension
+public static class DictionaryHelper
 {
     public static IDictionary<string, string> Clone(this IDictionary<string, string> dict)
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace RedisConfigProvider.Extensions;
+namespace RedisConfigProvider.Operate;
 
 public static class JsonElementExtensions
 {

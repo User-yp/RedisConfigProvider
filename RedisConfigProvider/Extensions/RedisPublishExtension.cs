@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RedisConfigProvider.Publish;
+using RedisConfigProvider.PublishConfig;
 
 namespace RedisConfigProvider.Extensions;
 
