@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connStr = builder.Configuration.GetValue<string>("RedisConnStr");
 builder.Host.ConfigureAppConfiguration((_, configBuilder) =>
 {
-    configBuilder.AddConfiguration(() => ConnectionMultiplexer.Connect(connStr), 1, true, TimeSpan.FromSeconds(3));
+    configBuilder.AddConfiguration(() => ConnectionMultiplexer.Connect(connStr), 1, false, TimeSpan.FromSeconds(3));
 });
 // Add services to the container.
 

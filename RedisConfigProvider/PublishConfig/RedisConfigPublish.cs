@@ -68,7 +68,6 @@ public class RedisConfigPublish : IRedisConfigPublish
                 await semaphore.WaitAsync();
                 try
                 {
-
                     // Write all items in the queue to Redis  
                     while (queue.TryDequeue(out var value))
                     {
