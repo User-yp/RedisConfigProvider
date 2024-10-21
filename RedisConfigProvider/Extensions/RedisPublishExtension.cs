@@ -1,15 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RedisConfigProvider.PublishConfig;
+using System;
 
-namespace RedisConfigProvider.Extensions;
-
-public static class RedisPublishExtension
+namespace RedisConfigProvider.Extensions
 {
-    public static IServiceCollection AddRedisPublishService(this IServiceCollection service, Action<RedisConfigOptions> options)
+    public static class RedisPublishExtension
     {
-        service.Configure(options);
-        return service.AddSingleton<IRedisConfigPublish, RedisConfigPublish>();
+        public static IServiceCollection AddRedisPublishService(this IServiceCollection service, Action<RedisConfigOptions> options)
+        {
+            service.Configure(options);
+            return service.AddSingleton<IRedisConfigPublish, RedisConfigPublish>();
+        }
     }
-}
 
+}

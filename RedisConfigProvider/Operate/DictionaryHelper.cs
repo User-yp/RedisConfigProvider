@@ -1,4 +1,6 @@
-﻿namespace RedisConfigProvider.Operate;
+﻿using System.Collections.Generic;
+
+namespace RedisConfigProvider.Operate;
 
 public static class DictionaryHelper
 {

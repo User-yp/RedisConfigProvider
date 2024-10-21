@@ -1,25 +1,26 @@
 ﻿using System.Text.Json;
 
-namespace RedisConfigProvider.Operate;
-
-public static class JsonElementExtensions
+namespace RedisConfigProvider.Operate
 {
-    public static string GetValueForConfig(this JsonElement e)
+    public static class JsonElementExtensions
     {
-        if (e.ValueKind == JsonValueKind.String)
+        public static string GetValueForConfig(this JsonElement e)
         {
-            //remove the quotes, "ab"-->ab
-            return e.GetString();
-        }
-        else if (e.ValueKind == JsonValueKind.Null
-            || e.ValueKind == JsonValueKind.Undefined)
-        {
-            //remove the quotes, "null"-->null
-            return null;
-        }
-        else
-        {
-            return e.GetRawText();
+            if (e.ValueKind == JsonValueKind.String)
+            {
+                //remove the quotes, "ab"-->ab
+                return e.GetString();
+            }
+            else if (e.ValueKind == JsonValueKind.Null
+                || e.ValueKind == JsonValueKind.Undefined)
+            {
+                //remove the quotes, "null"-->null
+                return null;
+            }
+            else
+            {
+                return e.GetRawText();
+            }
         }
     }
 }

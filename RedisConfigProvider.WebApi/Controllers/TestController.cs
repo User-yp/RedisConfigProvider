@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Concurrent;
 using RedisConfigProvider.PublishConfig;
 using RedisConfigProvider.Operate;
+using System.Collections.Concurrent;
 
-namespace RedisConfig.WebApi.Controllers;
+
+namespace RedisConfigProvider.WebApi.Controllers;
 
 [Route("[controller]/[action]")]
 [ApiController]

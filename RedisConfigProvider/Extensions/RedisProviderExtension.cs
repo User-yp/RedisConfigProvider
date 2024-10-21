@@ -1,25 +1,27 @@
 ﻿using Microsoft.Extensions.Configuration;
 using RedisConfigProvider;
 using StackExchange.Redis;
+using System;
 
-namespace Microsoft.Extensions.Configuration;
-
-public static class RedisProviderExtension
+namespace Microsoft.Extensions.Configuration
 {
-    public static IConfigurationBuilder AddConfiguration(this IConfigurationBuilder builder, Func<ConnectionMultiplexer> ConnectionString,
-        int DbNumber, bool reloadOnChange = false, TimeSpan? reloadInterval = null)
+    public static class RedisProviderExtension
     {
-        return AddConfiguration(builder, new RedisConfigOptions
+        public static IConfigurationBuilder AddConfiguration(this IConfigurationBuilder builder, Func<ConnectionMultiplexer> ConnectionString,
+            int DbNumber, bool reloadOnChange = false, TimeSpan? reloadInterval = null)
         {
-            ConnectionMultiplexer = ConnectionString,
-            DbNumber = DbNumber,
-            ReloadOnChange = reloadOnChange,
-            ReloadInterval = reloadInterval
-        });
-    }
-    public static IConfigurationBuilder AddConfiguration(this IConfigurationBuilder builder,
-        RedisConfigOptions options)
-    {
-        return builder.Add(new RedisConfigSource(options));
+            return AddConfiguration(builder, new RedisConfigOptions
+            {
+                ConnectionMultiplexer = ConnectionString,
+                DbNumber = DbNumber,
+                ReloadOnChange = reloadOnChange,
+                ReloadInterval = reloadInterval
+            });
+        }
+        public static IConfigurationBuilder AddConfiguration(this IConfigurationBuilder builder,
+            RedisConfigOptions options)
+        {
+            return builder.Add(new RedisConfigSource(options));
+        }
     }
 }
