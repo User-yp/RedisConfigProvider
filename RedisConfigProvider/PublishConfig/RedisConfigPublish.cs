@@ -22,7 +22,7 @@ namespace RedisConfigProvider.PublishConfig
         }
         public RedisConfigPublish(RedisConfigOptions options)
         {
-            _conn = options.ConnectionMultiplexer();
+            _conn = options.ConnectionMultiplexer;
             _db = _conn.GetDatabase(options.DbNumber);
         }
 

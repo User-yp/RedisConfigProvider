@@ -70,7 +70,7 @@ namespace RedisConfigProvider
                 int dbNumber = options.DbNumber;
                 IDatabase database = null;
                 Data.Clear();
-                using (var conn = options.ConnectionMultiplexer())
+                using (var conn = options.ConnectionMultiplexer)
                 {
                     database = conn.GetDatabase(dbNumber);
                     DoLoad(database);

@@ -22,7 +22,7 @@ dotnet add package RedisConfigProvider
 var connStr = builder.Configuration.GetValue<string>("RedisConnStr");
 builder.Host.ConfigureAppConfiguration((_, configBuilder) =>
 {
-    configBuilder.AddConfiguration(() => ConnectionMultiplexer.Connect(connStr), DbNumber: 1, reloadOnChange: true, ReloadInterval:TimeSpan.FromSeconds(3));
+    configBuilder.AddRedisConfiguration(connStr, 1, false, TimeSpan.FromSeconds(3));
 });
 ```
 
@@ -45,11 +45,7 @@ reloadInterval:将Redis的配置信息同步到IConfiguration的时间间隔。
 并不是所有项目否需要发布配置，大多数项目仅需要读取，因此分开注册服务。
 
 ```c#
-builder.Services.AddRedisPublishService(options =>
-{
-    options.ConnectionMultiplexer = () => ConnectionMultiplexer.Connect(connStr);
-    options.DbNumber = 1;
-});
+builder.Services.AddRedisPublishService(connStr, 1);
 ```
 
 与上文一样，Redis连接字符串connStr和发布到指定的Redis库DbNumber

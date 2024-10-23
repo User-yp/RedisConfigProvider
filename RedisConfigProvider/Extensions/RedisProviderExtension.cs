@@ -7,13 +7,13 @@ namespace Microsoft.Extensions.Configuration
 {
     public static class RedisProviderExtension
     {
-        public static IConfigurationBuilder AddConfiguration(this IConfigurationBuilder builder, Func<ConnectionMultiplexer> ConnectionString,
-            int DbNumber, bool reloadOnChange = false, TimeSpan? reloadInterval = null)
+        public static IConfigurationBuilder AddRedisConfiguration(this IConfigurationBuilder builder, string connStr,
+            int dbNumber, bool reloadOnChange = false, TimeSpan? reloadInterval = null)
         {
             return AddConfiguration(builder, new RedisConfigOptions
             {
-                ConnectionMultiplexer = ConnectionString,
-                DbNumber = DbNumber,
+                ConnectionMultiplexer = ConnectionMultiplexer.Connect(connStr),
+                DbNumber = dbNumber,
                 ReloadOnChange = reloadOnChange,
                 ReloadInterval = reloadInterval
             });
